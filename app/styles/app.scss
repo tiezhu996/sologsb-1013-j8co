@@ -194,6 +194,22 @@ body {
   gap: 4px;
 }
 
+.scene-entry {
+  display: grid;
+  grid-template-columns: 1fr 26px;
+  border-left: 3px solid transparent;
+  border-radius: 8px;
+}
+
+.scene-entry:hover,
+.scene-entry.is-active {
+  background: #edf4f7;
+}
+
+.scene-entry.is-active {
+  border-left-color: var(--blue);
+}
+
 .scene-item {
   width: 100%;
   padding: 10px 9px;
@@ -201,20 +217,50 @@ body {
   gap: 4px;
   text-align: left;
   border: 0;
-  border-left: 3px solid transparent;
   border-radius: 8px;
   color: var(--ink);
   background: transparent;
   cursor: pointer;
 }
 
-.scene-item:hover,
-.scene-item.is-active {
-  background: #edf4f7;
+.scene-controls {
+  padding: 6px 6px 6px 0;
+  display: grid;
+  gap: 3px;
+  align-content: center;
 }
 
-.scene-item.is-active {
-  border-left-color: var(--blue);
+.scene-controls button {
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #d3dbe2;
+  border-radius: 6px;
+  color: #4e6c80;
+  background: #fff;
+  font-size: 11px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.scene-controls button:hover:not(:disabled) {
+  border-color: #7fa6bd;
+  background: #eef5f9;
+}
+
+.scene-controls button:disabled {
+  opacity: .35;
+  cursor: default;
+}
+
+.scene-controls .scene-remove {
+  color: #a0444f;
+}
+
+.scene-controls .scene-remove:hover {
+  border-color: #c98088;
+  background: #fbeeee;
 }
 
 .scene-item .act-name {
@@ -253,7 +299,7 @@ body {
 .board-heading {
   padding: 13px 15px;
   display: grid;
-  grid-template-columns: 1fr 120px auto;
+  grid-template-columns: 1fr auto auto;
   align-items: center;
   gap: 16px;
 }
@@ -263,6 +309,20 @@ body {
   grid-template-columns: 100px 70px minmax(220px, 1fr);
   gap: 8px;
   margin-top: 4px;
+}
+
+.scene-endnote {
+  display: block;
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.start-time-edit {
+  display: grid;
+  grid-template-columns: 110px auto;
+  gap: 6px;
+  align-items: center;
 }
 
 .lock-state {
@@ -777,7 +837,7 @@ kbd {
   }
 
   .board-heading {
-    grid-template-columns: 1fr 110px;
+    grid-template-columns: 1fr;
   }
 
   .lock-state {

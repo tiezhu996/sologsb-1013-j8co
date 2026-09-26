@@ -21,6 +21,7 @@ export interface Scene {
   name: string;
   title: string;
   startTime: string;
+  fixedStart: boolean;
   locked: boolean;
   cues: Cue[];
 }
