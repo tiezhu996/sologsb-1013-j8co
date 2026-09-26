@@ -39,11 +39,22 @@
       </div>
       <div class="scene-list">
         {{#each this.filteredScenes as |scene|}}
-          <button type="button" class="scene-item {{if scene.active "is-active"}}" {{on "click" (fn this.selectScene scene.id)}}>
-            <span class="act-name">{{scene.act}}</span>
-            <strong>{{scene.name}} · {{scene.title}}</strong>
-            <small>{{scene.startTime}} · {{scene.cues.length}} 条 · {{scene.issueCount}} 项检查</small>
-          </button>
+          <div class="scene-item {{if scene.active "is-active"}}">
+            <button type="button" class="scene-select" {{on "click" (fn this.selectScene scene.id)}}>
+              <span class="act-name">
+                {{scene.act}}
+                <span class="start-tag {{if scene.fixedStart "is-fixed" "is-auto"}}">{{if scene.fixedStart "固定开场" "自动顺延"}}</span>
+              </span>
+              <strong>{{scene.name}} · {{scene.title}}</strong>
+              <small>开 {{scene.startTime}} · 散 {{scene.endLabel}}</small>
+              <small>{{scene.cues.length}} 条提示 · 时长 {{scene.durationLabel}} · {{scene.issueCount}} 项检查</small>
+            </button>
+            <div class="scene-controls">
+              <button type="button" class="scene-nav" title="上移场次" disabled={{scene.isFirst}} {{on "click" (fn this.moveScene scene.id -1)}}>↑</button>
+              <button type="button" class="scene-nav" title="下移场次" disabled={{scene.isLast}} {{on "click" (fn this.moveScene scene.id 1)}}>↓</button>
+              <button type="button" class="scene-delete" title="删除场次（场次内仍有提示时不可删除）" disabled={{gt scene.cues.length 0}} {{on "click" (fn this.removeScene scene.id)}}>×</button>
+            </div>
+          </div>
         {{else}}
           <p class="empty-copy">未找到场次</p>
         {{/each}}
@@ -64,8 +75,19 @@
               <PaperInput @value={{this.activeScene.name}} @onChange={{fn this.updateSceneField "name"}} />
               <PaperInput @value={{this.activeScene.title}} @onChange={{fn this.updateSceneField "title"}} />
             </div>
+            {{#if this.activeSceneSummary}}
+              <div class="scene-time-summary">
+                本场时长 <strong>{{this.activeSceneSummary.durationLabel}}</strong> · 散场 <strong>{{this.activeSceneSummary.endLabel}}</strong>
+              </div>
+            {{/if}}
           </div>
-          <PaperInput @label="开场时间" @value={{this.activeScene.startTime}} @onChange={{fn this.updateSceneField "startTime"}} />
+          <div class="start-time-block">
+            <PaperInput @label="开场时间" @value={{this.activeScene.startTime}} @onChange={{fn this.updateSceneField "startTime"}} disabled={{this.activeScene.locked}} />
+            <label class="fixed-toggle" title="固定后该场按所写时间开始，后面的场次从它散场后顺延">
+              <input type="checkbox" checked={{this.activeScene.fixedStart}} disabled={{this.activeScene.locked}} {{on "change" this.toggleSceneFixed}} />
+              开场固定
+            </label>
+          </div>
           <div class="lock-state">
             {{#if this.activeScene.locked}}
               <span class="locked-label">本场已锁定</span>

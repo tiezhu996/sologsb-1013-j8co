@@ -21,6 +21,8 @@ export interface Scene {
   name: string;
   title: string;
   startTime: string;
+  /** 开场时间是否固定：固定的场次按自己的时间开始，后面的场次从它散场后顺延 */
+  fixedStart: boolean;
   locked: boolean;
   cues: Cue[];
 }
